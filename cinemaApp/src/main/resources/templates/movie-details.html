@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Movie Details</title>
+
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="stylesheet" href="barStyle.css" th:href="@{/barStyle.css}" />
+	<link rel="stylesheet" href="movieDetailsStyle.css" th:href="@{/movieDetailsStyle.css}">
+</head>
+
+<body>
+	
+	<div class="w3-bar">
+		<a href="home" class="w3-bar-item w3-button w3-padding-16">Home</a>
+		<a href="about" class="w3-bar-item w3-button w3-padding-16">About</a>
+		<a href="select-movie" class="w3-bar-item w3-button w3-padding-16">Movies</a>
+		<a href="movie-details" class="w3-bar-item w3-button w3-padding-16">Movie Details</a>
+
+		<div th:if="${loggedInUser != null}">
+			<a href="profile" class="w3-bar-item w3-button w3-padding-16 w3-right"><span th:text="${loggedInUser.name}"></span></a>
+			<a href="logout" class="w3-bar-item w3-button w3-padding-16 w3-right">Logout</a>
+		</div>
+
+		<div th:if="${loggedInUser == null}">
+			<a href="register" class="w3-bar-item w3-button w3-padding-16 w3-right">Register</a>
+			<a href="login" class="w3-bar-item w3-button w3-padding-16 w3-right">Login</a>
+		</div>
+	</div>
+	
+	<br><br>
+
+	<div class="film-container" th:each="movie : ${movies}" th:id="'M' + ${movie.id}">
+		
+		<div class="film-poster">
+			<img th:src="@{${movie.poster}}" th:alt="${movie.name}">
+		</div>
+
+		<div class="film-info">
+			<h1 th:text="${movie.name}"></h1>
+			<div class="tags">
+				<span>IMAX</span>
+				<span>3D</span>
+				<span>2D</span>
+			</div>
+			<p><strong>Director:</strong> <span th:text="${movie.director}"></span></p>
+			<p><strong>Cast:</strong> <span th:text="${movie.cast}"></span></p>
+			<p><strong>Genre:</strong> <span th:text="${movie.genre}"></span></p>
+			<p><strong>Duration:</strong> <span th:text="${movie.duration}"></span></p>
+
+			<div class="movie-summary">
+				<h2>Movie Summary</h2>
+				<p th:text="${movie.summary}"></p>
+			</div>
+
+			<div class="buttons">
+				<form action="book-ticket" method="POST" style="display:inline-block;">
+					<input type="hidden" name="movie_id" th:value="${movie.id}">
+					<button type="submit" class="buy-ticket">Book Ticket</button>
+				</form>
+				<button class="watch-trailer" th:attr="onclick=|window.open('${movie.trailer}', '_blank')|">
+					Watch Trailer
+				</button>
+			</div>
+		</div>
+
+		<div class="rating-section">
+			<h2><span>Ratings</span></h2>
+			<div class="progress">
+				<p>IMDB: <progress th:value="${movie.rating_imdb}" max="100"></progress>
+					<span th:text="${movie.rating_imdb}"></span>
+				</p>
+				<p>Rotten Tomatoes: <progress th:value="${movie.rating_rottenTomatoes}" max="100"></progress>
+					<span th:text="${movie.rating_rottenTomatoes}"></span>
+				</p>
+				<p>Metacritic: <progress th:value="${movie.rating_metacritic}" max="100"></progress>
+					<span th:text="${movie.rating_metacritic}"></span>
+				</p>
+				<p>Letterboxd: <progress th:value="${movie.rating_letterboxd}" max="100"></progress>
+					<span th:text="${movie.rating_letterboxd}"></span>
+				</p>
+			</div>
+		</div>
+		
+		<div class="horizontal-line"></div>
+		
+	</div>
+</body>
+
+</html>

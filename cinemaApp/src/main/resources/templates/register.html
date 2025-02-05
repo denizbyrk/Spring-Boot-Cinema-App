@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Register</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="barStyle.css" th:href="@{/barStyle.css}" />
+    <link rel="stylesheet" href="registerStyle.css" th:href="@{/registerStyle.css}" />
+</head>
+<body>
+	
+	<div class="w3-bar">
+		<a href="home" class="w3-bar-item w3-button w3-padding-16">Home</a>
+		<a href="about" class="w3-bar-item w3-button w3-padding-16">About</a>
+		<a href="select-movie" class="w3-bar-item w3-button w3-padding-16">Movies</a>
+		<a href="movie-details" class="w3-bar-item w3-button w3-padding-16">Movie Details</a>
+
+		<div th:if="${loggedInUser != null}">
+			<a href="profile" class="w3-bar-item w3-button w3-padding-16 w3-right"><span th:text="${loggedInUser.name}"></span></a>
+			<a href="logout" class="w3-bar-item w3-button w3-padding-16 w3-right">Logout</a>
+		</div>
+
+		<div th:if="${loggedInUser == null}">
+			<a href="register" class="w3-bar-item w3-button w3-padding-16 w3-right">Register</a>
+			<a href="login" class="w3-bar-item w3-button w3-padding-16 w3-right">Login</a>
+		</div>
+	</div>
+	
+    <div class="container">
+        <h1 style="margin-bottom: 0px">Register</h1>
+        
+        <form th:action="@{register}" th:object="${user}" method="post">
+            <label>Name <span style="color: rgb(255, 87, 87);">*</span><span th:text="${nameEmptyError}" style="color: rgb(255, 87, 87); font-size:16px ;margin-top: -20px"></span></label>
+            <input type="text" name="name" class="textarea" th:field="*{name}" placeholder="Enter your name"/><br>
+			<label>Email <span style="color: rgb(255, 87, 87);">*</span><span th:text="${emailEmptyError}" style="color: rgb(255, 87, 87); font-size:16px ;margin-top: -20px"></span><span th:text="${emailExistError}" style="color: rgb(255, 87, 87); font-size:16px ;margin-top: -20px"></span></label>
+            <input type="email" name="email" class="textarea" th:field="*{email}" placeholder="Enter your email"/><br>
+            <label>Password <span style="color: rgb(255, 87, 87);">*</span><span th:text="${passwordEmptyError}" style="color: rgb(255, 87, 87); font-size:16px ;margin-top: -20px"></span><span th:text="${passwordMatchError}" style="color: rgb(255, 87, 87); font-size:16px ;margin-top: -20px"></span><span th:text="${passwordLengthError}" style="color: rgb(255, 87, 87); font-size:13px ;margin-top: -20px"></span></label>
+            <input type="password" name="password" class="textarea" th:field="*{password}" placeholder="Enter your password"/><br>
+            <label>Confirm Password <span style="color: rgb(255, 87, 87);">*</span><span th:text="${passwordConfirmEmptyError}" style="color: rgb(255, 87, 87); font-size:12px ;margin-top: -20px"></span></label>
+            <input type="password" name="confirmPassword" class="textarea" placeholder="Confirm your password"/><br>
+            <button type="submit">Register</button>
+        </form>
+        
+        <p class="footer">Already have an account? <a href="login">Login</a></p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Buy Ticket</title>
+
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="stylesheet" href="barStyle.css" th:href="@{/barStyle.css}" />
+	<link rel="stylesheet" href="bookTicketStyle.css" th:href="@{/bookTicketStyle.css}" />
+</head>
+
+<body>
+
+	<div class="w3-bar">
+		<a href="home" class="w3-bar-item w3-button w3-padding-16">Home</a>
+		<a href="about" class="w3-bar-item w3-button w3-padding-16">About</a>
+		<a href="select-movie" class="w3-bar-item w3-button w3-padding-16">Movies</a>
+		<a href="movie-details" class="w3-bar-item w3-button w3-padding-16">Movie Details</a>
+
+		<div th:if="${loggedInUser != null}">
+			<a href="profile" class="w3-bar-item w3-button w3-padding-16 w3-right"><span th:text="${loggedInUser.name}"></span></a>
+			<a href="logout" class="w3-bar-item w3-button w3-padding-16 w3-right">Logout</a>
+		</div>
+
+		<div th:if="${loggedInUser == null}">
+			<a href="register" class="w3-bar-item w3-button w3-padding-16 w3-right">Register</a>
+			<a href="login" class="w3-bar-item w3-button w3-padding-16 w3-right">Login</a>
+		</div>
+	</div>
+
+	<div class="w3-container w3-margin-top w3-center">
+		<h2 style="color:white">You are booking ticket for: <span th:text="${selectedMovie}"></span></h2>
+		<h4 style="color:white">Date Selection</h4>
+
+		<form method="POST" th:action="@{book-ticket}">
+			<input type="hidden" name="selected_movie_name" th:value="${selectedMovie}">
+			<input type="hidden" name="movie_id" th:value="${selectedMovieId}">
+			<div class="w3-row w3-center" style="display: flex; justify-content: center; gap: 10px;">
+				<div class="w3-col s2">
+					<button type="submit" name="selected_date" th:value="${today}" class="w3-button w3-block"
+						th:classappend="${selectedDate == today} ? 'button-color-clicked' : 'button-color'">
+						<span th:text="${today}"></span><br>
+					</button>
+				</div>
+				<div class="w3-col s2">
+					<button type="submit" name="selected_date" th:value="${tomorrow}" class="w3-button w3-block"
+						th:classappend="${selectedDate == tomorrow} ? 'button-color-clicked' : 'button-color'">
+						<span th:text="${tomorrow}"></span><br>
+					</button>
+				</div>
+				<div class="w3-col s2">
+					<button type="submit" name="selected_date" th:value="${dayAfterTomorrow}" class="w3-button w3-block"
+						th:classappend="${selectedDate == dayAfterTomorrow} ? 'button-color-clicked' : 'button-color'">
+						<span th:text="${dayAfterTomorrow}"></span><br>
+					</button>
+				</div>
+			</div>
+		</form>
+
+		<form method="POST" th:action="@{book-ticket}" th:if="${selectedDate}">
+			<div>
+				<h4 style="color:white">Seance Selection (Date: <span th:text="${selectedDate}"></span>)</h4>
+				<input type="hidden" name="selected_movie_name" th:value="${selectedMovie}">
+				<input type="hidden" name="movie_id" th:value="${selectedMovieId}">
+				<input type="hidden" name="selected_date" th:value="${selectedDate}">
+				<button type="submit" name="selected_seans" value="11:30" class="w3-button"
+					th:classappend="${selectedSeans == '11:30'} ? 'button-color-clicked' : 'button-color'">11:30</button>
+				<button type="submit" name="selected_seans" value="14:45" class="w3-button"
+					th:classappend="${selectedSeans == '14:45'} ? 'button-color-clicked' : 'button-color'">14:45</button>
+				<button type="submit" name="selected_seans" value="18:00" class="w3-button"
+					th:classappend="${selectedSeans == '18:00'} ? 'button-color-clicked' : 'button-color'">18:00</button>
+				<button type="submit" name="selected_seans" value="21:15" class="w3-button"
+					th:classappend="${selectedSeans == '21:15'} ? 'button-color-clicked' : 'button-color'">21:15</button>
+			</div>
+		</form>
+	</div>
+
+	<div th:if="${selectedDate != null and selectedSeans != null}" class="container">
+		<div class="w3-container w3-light-orange w3-padding w3-margin-top">
+			<h4 style="color:white"><strong>Selected Date and Seance</strong></h4>
+			<p style="color:white"><strong>Date:</strong> <span th:text="${selectedDate}"></span></p>
+			<p style="color:white"><strong>Seance:</strong> <span th:text="${selectedSeans}"></span></p>
+		</div>
+	</div>
+
+	<div th:if="${selectedDate != null and selectedSeans != null}" class="seats-container">
+		<h2 style="color:white; text-align:center; margin: 20px 0; font-size:1.5rem; font-weight:bold">SCREEN</h2>
+
+		<form method="POST" action="confirm-ticket">
+			<input type="hidden" name="selected_movie_name" th:value="${selectedMovie}">
+			<input type="hidden" name="movie_id" th:value="${selectedMovieId}">
+			<input type="hidden" name="selected_date" th:value="${selectedDate}">
+			<input type="hidden" name="selected_seans" th:value="${selectedSeans}">
+
+			<div class="seats-container">
+				<div th:each="row : ${seats}">
+					<div style="display: flex; gap: 5px;">
+						<div th:each="seat : ${row}">
+							<label th:if="${seat.available}" style="position: relative;">
+								<input type="radio" name="seatId" th:value="${seat.id}"
+									th:checked="${seat.id == seatId}" class="seat-input">
+								<span class="seat-box" style="text-align: center; font-weight: bold;"
+									th:text="${seat.number}"></span>
+							</label>
+							<div th:if="${!seat.available}" class="seat disabled"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="center-button">
+				<button style="background-color:#4CAF50" type="submit" class="w3-button w3-margin-top" id="submitButton"
+					disabled>Book Ticket</button>
+			</div>
+		</form>
+
+		<script>
+			const seatInputs = document.querySelectorAll('.seat-input');
+			const submitButton = document.getElementById('submitButton');
+
+			const selectedButton = Array.from(seatInputs).some(input => input.checked);
+			submitButton.disabled = !selectedButton;
+
+			seatInputs.forEach(input => {
+				input.addEventListener('change', () => {
+					submitButton.disabled = false;
+				});
+			});
+		</script>
+	</div>
+
+	<br>
+</body>
+
+</html>

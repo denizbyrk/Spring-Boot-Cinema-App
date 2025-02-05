@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Profile</title>
+
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="stylesheet" href="barStyle.css" th:href="@{/barStyle.css}" />
+	<link rel="stylesheet" href="profileStyle.css" th:href="@{/profileStyle.css}" />
+</head>
+
+<body>
+
+	<div th:if="${passwordChanged}">
+		<script>
+			alert("[[${passwordChanged}]]");
+		</script>
+	</div>
+
+	<div class="w3-bar">
+		<a href="home" class="w3-bar-item w3-button w3-padding-16">Home</a>
+		<a href="about" class="w3-bar-item w3-button w3-padding-16">About</a>
+		<a href="select-movie" class="w3-bar-item w3-button w3-padding-16">Movies</a>
+		<a href="movie-details" class="w3-bar-item w3-button w3-padding-16">Movie Details</a>
+
+		<div th:if="${loggedInUser != null}">
+			<a href="profile" class="w3-bar-item w3-button w3-padding-16 w3-right"><span th:text="${loggedInUser.name}"></span></a>
+			<a href="logout" class="w3-bar-item w3-button w3-padding-16 w3-right">Logout</a>
+		</div>
+
+		<div th:if="${loggedInUser == null}">
+			<a href="register" class="w3-bar-item w3-button w3-padding-16 w3-right">Register</a>
+			<a href="login" class="w3-bar-item w3-button w3-padding-16 w3-right">Login</a>
+		</div>
+	</div>
+
+	<h1 style="color:white; text-align:center;">My Profile</h1>
+	<div class="container">
+		<label style="color:white; font-size:20px"><span style="color:#4CAF50">Name: </span>
+			<span th:text="${loggedInUser.name}"></span></label><br>
+		<label style="color:white; font-size:20px"><span style="color:#4CAF50">Email: </span>
+			<span th:text="${loggedInUser.email}"></span>
+		</label><br>
+		<button type="submit" class="submitButton" onclick="window.location.href='my-tickets';">My
+			Tickets</button><br>
+		<button type="submit" class="submitButton" onclick="window.location.href='validate-password';">Change
+			Password</button><br>
+		<button type="submit" class="submitButton" onclick="window.location.href='delete-account';">Delete
+			Account</button>
+	</div>
+</body>
+
+</html>

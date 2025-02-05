@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Delete Account</title>
+
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="stylesheet" href="barStyle.css" th:href="@{/barStyle.css}" />
+	<link rel="stylesheet" href="profileStyle.css" th:href="@{/profileStyle.css}" />
+</head>
+
+<body>
+
+	<div class="w3-bar">
+		<a href="home" class="w3-bar-item w3-button w3-padding-16">Home</a>
+		<a href="about" class="w3-bar-item w3-button w3-padding-16">About</a>
+		<a href="select-movie" class="w3-bar-item w3-button w3-padding-16">Movies</a>
+		<a href="movie-details" class="w3-bar-item w3-button w3-padding-16">Movie Details</a>
+
+		<div th:if="${loggedInUser != null}">
+			<a href="profile" class="w3-bar-item w3-button w3-padding-16 w3-right"><span th:text="${loggedInUser.name}"></span></a>
+			<a href="logout" class="w3-bar-item w3-button w3-padding-16 w3-right">Logout</a>
+		</div>
+
+		<div th:if="${loggedInUser == null}">
+			<a href="register" class="w3-bar-item w3-button w3-padding-16 w3-right">Register</a>
+			<a href="login" class="w3-bar-item w3-button w3-padding-16 w3-right">Login</a>
+		</div>
+	</div>
+
+	<div class="container" style="padding-top:10px">
+
+		<h2 style="color:white">Validate Password</h2>
+
+		<form action="delete-account" method="POST" onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be reversed.');">
+
+			<div class="formElement">
+				<label style="color:white; font-size: 16px">Enter Your Password<span style="color:rgb(255, 87, 87); font-size: 12px" th:if="${passwordError != null}" th:utext="'<br>' + ${passwordError}"></span><span style="color:rgb(255, 87, 87); font-size: 12px" th:if="${passwordLengthError != null}" th:utext="'<br>' + ${passwordLengthError}"></span></label>
+				<input type="password" class="textarea" name="password" placeholder="Enter your password">
+			</div>
+			<button type="submit" class="submitButton">Delete Account</button>
+		</form>
+	</div>
+
+	<script>
+		function confirmDelete() {
+
+			if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+
+				alert("You successfully deleted your account.");
+			}
+		}
+	</script>
+
+</body>
+
+</html>

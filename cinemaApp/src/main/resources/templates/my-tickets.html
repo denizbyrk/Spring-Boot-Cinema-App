@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>My Tickets</title>
+
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="stylesheet" href="barStyle.css" th:href="@{/barStyle.css}" />
+	<link rel="stylesheet" href="homeStyle.css" th:href="@{/homeStyle.css}" />
+	<link rel="stylesheet" href="myTicketsStyle.css" th:href="@{/myTicketsStyle.css}" />
+</head>
+
+<body>
+
+	<div th:if="${ticketBooked}">
+		<script>
+			alert("[[${ticketBooked}]]");
+		</script>
+	</div>
+
+	<div th:if="${ticketDeleted}">
+		<script>
+			alert("[[${ticketDeleted}]]");
+		</script>
+	</div>
+
+	<div class="w3-bar">
+		<a href="home" class="w3-bar-item w3-button w3-padding-16">Home</a>
+		<a href="about" class="w3-bar-item w3-button w3-padding-16">About</a>
+		<a href="select-movie" class="w3-bar-item w3-button w3-padding-16">Movies</a>
+		<a href="movie-details" class="w3-bar-item w3-button w3-padding-16">Movie Details</a>
+
+		<div th:if="${loggedInUser != null}">
+			<a href="profile" class="w3-bar-item w3-button w3-padding-16 w3-right"><span th:text="${loggedInUser.name}"></span></a>
+			<a href="logout" class="w3-bar-item w3-button w3-padding-16 w3-right">Logout</a>
+		</div>
+
+		<div th:if="${loggedInUser == null}">
+			<a href="register" class="w3-bar-item w3-button w3-padding-16 w3-right">Register</a>
+			<a href="login" class="w3-bar-item w3-button w3-padding-16 w3-right">Login</a>
+		</div>
+	</div>
+
+	<h1 style="color:white; margin-left: 20px">My Tickets</h1>
+
+	<div style="margin: 20px;">
+		<div th:if="${!hasTickets}">
+			<div style="padding: 15px; background-color: #3a3f47; border-radius: 5px; color: white;">
+				<label><span style="color:rgb(255, 87, 87)">You have no booked tickets.</span></label>
+			</div>
+		</div>
+
+		<div th:each="ticket : ${tickets}"
+			style="padding: 15px; background-color: #3a3f47; border-radius: 5px; color: white; margin-bottom: 15px;">
+
+			<div class="film-poster" style="display: inline-block;">
+				<img th:src="@{${ticket.movie.poster}}" th:alt="${ticket.movie}">
+			</div>
+
+			<div style="display: inline-block; padding-left: 20px;">
+				<label><span style="color:#4CAF50">Movie Name: </span> <span
+						th:text="${ticket.movie.name}"></span></label><br>
+				<label><span style="color:#4CAF50">Date: </span> <span th:text="${ticket.date}"></span></label><br>
+				<label><span style="color:#4CAF50">Seance: </span> <span th:text="${ticket.seance}"></span></label><br>
+				<label><span style="color:#4CAF50">Saloon: </span> <span th:text="${ticket.saloon}"></span></label><br>
+				<label><span style="color:#4CAF50">Seat: </span> <span th:text="${ticket.seat}"></span></label><br>
+				<form th:action="@{my-tickets}" method="post"
+					onsubmit="return confirm('Are you sure you want to cancel this ticket?');">
+					<input type="hidden" name="ticketId" th:value="${ticket.id}">
+					<button type="submit" class="submitButton" style="font-size: 20px; margin-top: 10px;">Cancel
+						Ticket</button>
+				</form>
+			</div>
+
+		</div>
+	</div>
+</body>
+
+</html>

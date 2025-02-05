@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Movie Theater Home Page</title>
+
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="stylesheet" href="barStyle.css" th:href="@{/barStyle.css}" />
+	<link rel="stylesheet" href="homeStyle.css" th:href="@{/homeStyle.css}" />
+</head>
+
+<body>
+
+	<div th:if="${loginSuccess}">
+		<script>
+			alert("[[${loginSuccess}]]");
+		</script>
+	</div>
+
+	<div th:if="${logoutSuccess}">
+		<script>
+			alert("[[${logoutSuccess}]]");
+		</script>
+	</div>
+
+	<div class="w3-bar">
+		<a href="home" class="w3-bar-item w3-button w3-padding-16">Home</a>
+		<a href="about" class="w3-bar-item w3-button w3-padding-16">About</a>
+		<a href="select-movie" class="w3-bar-item w3-button w3-padding-16">Movies</a>
+		<a href="movie-details" class="w3-bar-item w3-button w3-padding-16">Movie Details</a>
+
+		<div th:if="${loggedInUser != null}">
+			<a href="profile" class="w3-bar-item w3-button w3-padding-16 w3-right"><span th:text="${loggedInUser.name}"></span></a>
+			<a href="logout" class="w3-bar-item w3-button w3-padding-16 w3-right">Logout</a>
+		</div>
+
+		<div th:if="${loggedInUser == null}">
+			<a href="register" class="w3-bar-item w3-button w3-padding-16 w3-right">Register</a>
+			<a href="login" class="w3-bar-item w3-button w3-padding-16 w3-right">Login</a>
+		</div>
+	</div>
+
+	<h1 style="text-align:center; font-weight: bold; color:white">Movies in Theaters</h1>
+
+	<div class="slider" style="margin-top: 20px">
+
+		<div class="slides">
+			<div th:each="movie : ${movies}" class="slide">
+				<img th:src="@{${movie.poster}}" th:alt="${movie.name}">
+				<div class="overlay">
+					<button th:onclick="|window.location.href='movie-details#M' + ${movie.id}|">View Details</button>
+					<form action="book-ticket" method="POST" style="display:inline-block;">
+						<input type="hidden" name="movie_id" th:value="${movie.id}">
+						<button type="submit" class="buy-ticket">Book Ticket</button>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<button class="prev" onclick="moveSlide(-1)">&#10094;</button>
+		<button class="next" onclick="moveSlide(1)">&#10095;</button>
+	</div>
+
+	<br>
+
+	<script>
+		let currentSlide = 0;
+		const slideCount = document.querySelectorAll('.slide').length;
+		const slidesToShow = 3;
+		const slidesWidth = 100 / slidesToShow;
+
+		function moveSlide(direction) {
+			const totalSlides = slideCount - 2;
+			currentSlide = (currentSlide + direction + totalSlides) % totalSlides;
+
+			const slidesContainer = document.querySelector('.slides');
+			slidesContainer.style.transform = 'translateX(' + (-currentSlide * slidesWidth) + '%)';
+		}
+	</script>
+</body>
+
+</html>

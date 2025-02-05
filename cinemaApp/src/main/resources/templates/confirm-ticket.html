@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Buy Ticket</title>
+
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="stylesheet" href="barStyle.css" th:href="@{/barStyle.css}" />
+	<link rel="stylesheet" href="bookTicketStyle.css" th:href="@{/bookTicketStyle.css}" />
+</head>
+
+<body>
+
+	<div class="w3-bar">
+		<a href="home" class="w3-bar-item w3-button w3-padding-16">Home</a>
+		<a href="about" class="w3-bar-item w3-button w3-padding-16">About</a>
+		<a href="select-movie" class="w3-bar-item w3-button w3-padding-16">Movies</a>
+		<a href="movie-details" class="w3-bar-item w3-button w3-padding-16">Movie Details</a>
+
+		<div th:if="${loggedInUser != null}">
+			<a href="profile" class="w3-bar-item w3-button w3-padding-16 w3-right"><span th:text="${loggedInUser.name}"></span></a>
+			<a href="logout" class="w3-bar-item w3-button w3-padding-16 w3-right">Logout</a>
+		</div>
+
+		<div th:if="${loggedInUser == null}">
+			<a href="register" class="w3-bar-item w3-button w3-padding-16 w3-right">Register</a>
+			<a href="login" class="w3-bar-item w3-button w3-padding-16 w3-right">Login</a>
+		</div>
+	</div>
+
+	<h1 style="color:white; text-align:center;">Confirm Ticket</h1>
+
+	<div class="container" style="font-size: 24px; padding: 20px; display: flex; align-items: flex-start; gap: 20px;">
+
+		<div class="film-poster" style="display: inline-block;">
+			<img th:src="@{${poster}}" th:alt="${selectedMovie}">
+		</div>
+
+		<div style="flex: 1; white-space: nowrap; text-align: left;">
+			<label style="color:white"><span style="color:#4CAF50">Movie: </span><span
+					th:text="${selectedMovie}"></span></label><br>
+			<label style="color:white"><span style="color:#4CAF50">Date: </span><span
+					th:text="${selectedDate}"></span></label><br>
+			<label style="color:white"><span style="color:#4CAF50">Seance: </span><span
+					th:text="${selectedSeans}"></span></label><br>
+			<label style="color:white"><span style="color:#4CAF50">Saloon: </span><span
+					th:text="${saloon}"></span></label><br>
+			<label style="color:white"><span style="color:#4CAF50">Seat: </span><span
+					th:text="${seat}"></span></label><br>
+
+			<div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
+				<form method="POST" action="confirm-ticket">
+					<input type="hidden" name="confirm" value="confirmed">
+					<input type="hidden" name="selected_movie_name" th:value="${selectedMovie}">
+					<input type="hidden" name="movie_id" th:value="${saloon}">
+					<input type="hidden" name="selected_date" th:value="${selectedDate}">
+					<input type="hidden" name="selected_seans" th:value="${selectedSeans}">
+					<input type="hidden" name="seatId" th:value="${seat}">
+					<button type="submit" class="submitButton">Book Ticket</button>
+				</form>
+
+				<form method="POST" action="book-ticket">
+					<input type="hidden" name="confirm" value="confirmed">
+					<input type="hidden" name="selected_movie_name" th:value="${selectedMovie}">
+					<input type="hidden" name="movie_id" th:value="${saloon}">
+					<input type="hidden" name="selected_date" th:value="${selectedDate}">
+					<input type="hidden" name="selected_seans" th:value="${selectedSeans}">
+					<input type="hidden" name="seatId" th:value="${seat}">
+					<button type="submit" class="backButton">Back</button>
+				</form>
+			</div>
+		</div>
+
+	</div>
+</body>
+
+</html>

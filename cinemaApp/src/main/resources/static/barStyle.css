@@ -1,0 +1,17 @@
+.w3-bar {
+    position: relative;
+    background-color: #3a3f47;
+    color: white;
+    font-size: 8px;
+}
+
+.w3-bar-item {
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+    font-size: 1.5em;
+}
+
+.w3-bar .w3-bar-item:hover {
+    background-color: #4CAF50 !important;
+    color: black !important;
+}
